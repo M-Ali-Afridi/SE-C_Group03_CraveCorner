@@ -278,9 +278,12 @@
     updateCartCount: updateCartCount
   };
 
+  window.ccUpdateCartBadge = updateCartCount;
+
   document.addEventListener("DOMContentLoaded", function () {
     renderHeader();
     renderFooter();
+    window.ccUpdateCartBadge();
   });
 
   window.addEventListener("storage", function (event) {

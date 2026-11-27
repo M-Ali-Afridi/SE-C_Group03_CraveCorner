@@ -1,0 +1,179 @@
+/* ==========================================================================
+   Crave Corner - Menu Page Stylesheet (css/menu.css)
+   Page-specific styles using only CSS variables defined in css/style.css.
+   ========================================================================== */
+
+/* Search bar spacing */
+.cc-menu-search-wrap {
+  max-width: 34rem;
+}
+
+.cc-menu-search-wrap .cc-input:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+}
+
+/* Category filter bar */
+.cc-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.cc-filter-btn:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+}
+
+.cc-filter-btn[aria-pressed="true"] {
+  background-color: var(--cc-brown);
+  border-color: var(--cc-brown);
+  color: var(--cc-white);
+  font-weight: 600;
+}
+
+.cc-filter-btn[aria-pressed="true"]:hover,
+.cc-filter-btn[aria-pressed="true"]:focus-visible {
+  background-color: var(--cc-brown-hover);
+  border-color: var(--cc-brown-hover);
+  color: var(--cc-white);
+}
+
+/* Menu dish cards */
+.cc-menu-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.35rem;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.cc-menu-card:hover {
+  border-color: var(--cc-terracotta);
+  transform: translateY(-2px);
+}
+
+.cc-menu-card-header {
+  padding-right: 2.75rem;
+}
+
+/* Favourite heart button in the top-right corner (40px+ tap target) */
+.cc-fav-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background-color: transparent;
+  color: var(--cc-brown);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.cc-fav-btn svg {
+  fill: none;
+  transition: transform 0.2s ease, fill 0.2s ease, color 0.2s ease;
+}
+
+.cc-fav-btn:hover,
+.cc-fav-btn:focus-visible {
+  color: var(--cc-error);
+  background-color: var(--cc-soft-tint);
+}
+
+.cc-fav-btn:hover svg,
+.cc-fav-btn:focus-visible svg {
+  fill: var(--cc-error);
+  transform: scale(1.15);
+}
+
+.cc-fav-btn:focus-visible {
+  outline: 2px solid var(--cc-error);
+  outline-offset: 2px;
+}
+
+.cc-fav-btn.is-favorited {
+  color: var(--cc-error);
+}
+
+.cc-fav-btn.is-favorited svg {
+  fill: var(--cc-error);
+}
+
+.cc-menu-category {
+  display: inline-block;
+  color: var(--cc-dark-text);
+  background-color: var(--cc-cream);
+  border: 1px solid var(--cc-border);
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.cc-menu-title {
+  color: var(--cc-brown);
+  font-size: 1.2rem;
+  margin-top: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.cc-menu-card-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.cc-menu-single-price {
+  font-size: 1.1rem;
+}
+
+.cc-view-details-btn {
+  align-self: flex-start;
+}
+
+.cc-view-details-btn:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+}
+
+/* Pizza size breakdown */
+.cc-pizza-sizes {
+  list-style: none;
+  margin: 0;
+  padding: 0.65rem 0 0;
+  border-top: 1px solid var(--cc-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cc-pizza-size-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 0.92rem;
+}
+
+.cc-pizza-size-label {
+  color: var(--cc-dark-text);
+}
+
+/* Empty search/filter state */
+.cc-menu-empty {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: var(--cc-dark-text);
+  background-color: var(--cc-white);
+  border: 1px solid var(--cc-border);
+  border-radius: 0.75rem;
+}
