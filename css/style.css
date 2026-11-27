@@ -1,0 +1,183 @@
+/* ==========================================================================
+   Crave Corner - Shared Stylesheet (css/style.css)
+   Defines the site-wide color palette, sticky footer layout,
+   shared navbar styles, and shared footer styles.
+   ========================================================================== */
+
+/* 1. Color Variables (Brand Palette) */
+:root {
+  --cc-primary: #c82333;       /* Red primary for brand accents, buttons, active states */
+  --cc-primary-dark: #a71d2a;  /* Darker red for hover/focus states */
+  --cc-accent: #f59e0b;        /* Warm amber accent for highlights and badges */
+  --cc-charcoal: #212529;      /* Charcoal background for the footer */
+  --cc-cream: #fff8f0;         /* Warm cream background for pages */
+  --cc-surface: #ffffff;       /* Clean white surface for navbar and cards */
+  --cc-text: #2b2d42;          /* Dark slate text for high readability */
+  --cc-muted: #6c757d;         /* Muted gray for secondary text */
+  --cc-border: #eadfd2;        /* Soft warm border color */
+}
+
+/* 2. Base Layout (Sticky Footer using Flexbox) */
+body {
+  background-color: var(--cc-cream);
+  color: var(--cc-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* 3. Shared Header & Navigation Bar */
+.cc-navbar {
+  background-color: var(--cc-surface);
+  border-bottom: 2px solid var(--cc-border);
+}
+
+.cc-brand {
+  color: var(--cc-primary);
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+}
+
+.cc-brand:hover,
+.cc-brand:focus {
+  color: var(--cc-primary-dark);
+}
+
+.cc-navbar .nav-link {
+  color: var(--cc-text);
+  font-weight: 500;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.375rem;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.cc-navbar .nav-link:hover,
+.cc-navbar .nav-link:focus {
+  color: var(--cc-primary);
+  background-color: rgba(200, 35, 51, 0.06);
+}
+
+/* Highlight the active page link */
+.cc-navbar .nav-link.active {
+  color: var(--cc-primary);
+  font-weight: 700;
+  background-color: rgba(200, 35, 51, 0.1);
+}
+
+/* Favorites heart icon button */
+.cc-heart-link {
+  color: var(--cc-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.65rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.cc-heart-link:hover,
+.cc-heart-link:focus,
+.cc-heart-link.active {
+  color: var(--cc-primary);
+  background-color: rgba(200, 35, 51, 0.1);
+}
+
+.cc-heart-link.active svg {
+  fill: var(--cc-primary);
+}
+
+/* Cart pill link */
+.cc-cart-pill {
+  background-color: var(--cc-accent);
+  color: #1f1a14;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.cc-cart-pill:hover,
+.cc-cart-pill:focus {
+  background-color: #d98806;
+  color: #1f1a14;
+}
+
+.cc-cart-pill.active {
+  border-color: var(--cc-primary);
+  box-shadow: 0 0 0 0.15rem rgba(200, 35, 51, 0.25);
+}
+
+/* Login / Account button */
+.cc-login-btn {
+  background-color: var(--cc-primary);
+  border-color: var(--cc-primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.cc-login-btn:hover,
+.cc-login-btn:focus,
+.cc-login-btn.active {
+  background-color: var(--cc-primary-dark);
+  border-color: var(--cc-primary-dark);
+  color: #ffffff;
+}
+
+/* 4. Shared Footer */
+.cc-footer {
+  background-color: var(--cc-charcoal);
+  color: #e9ecef;
+}
+
+.cc-footer-brand {
+  color: var(--cc-accent);
+  font-weight: 700;
+}
+
+.cc-footer-heading {
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.cc-footer-text {
+  color: #ced4da;
+  font-size: 0.95rem;
+}
+
+.cc-footer-link {
+  color: #ced4da;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.15s ease;
+}
+
+.cc-footer-link:hover,
+.cc-footer-link:focus,
+.cc-footer-link.active {
+  color: var(--cc-accent);
+  text-decoration: underline;
+}
+
+.cc-footer-divider {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.cc-footer-copy {
+  color: #adb5bd;
+  font-size: 0.9rem;
+}
+
+/* 5. Placeholder Hero Card (used on index.html) */
+.cc-placeholder-card {
+  background-color: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-top: 4px solid var(--cc-primary);
+}
