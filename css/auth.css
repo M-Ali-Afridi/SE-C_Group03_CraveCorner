@@ -1,0 +1,337 @@
+/* ==========================================================================
+   Author: M. Rehan Sadiq
+   Roll Number: 26i-3122
+   Section: Section C
+   Crave Corner - Auth Page Stylesheet (css/auth.css)
+   Uses only colour and font variables defined in css/style.css.
+   ========================================================================== */
+
+/* Page Header */
+.cc-auth-section {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.cc-auth-page-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+}
+
+.cc-auth-page-subtitle {
+  color: var(--cc-dark-text);
+  max-width: 34rem;
+  margin: 0 auto;
+  font-size: 0.98rem;
+}
+
+/* Auth Cards */
+.cc-auth-card {
+  box-shadow: 0 8px 24px rgba(116, 61, 43, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.cc-auth-card-title {
+  font-size: 1.65rem;
+  font-weight: 700;
+}
+
+.cc-auth-card-tagline {
+  color: var(--cc-dark-text);
+  font-size: 0.95rem;
+}
+
+.cc-form-label {
+  font-weight: 500;
+  font-size: 0.92rem;
+  margin-bottom: 0.35rem;
+}
+
+/* Password Wrapper & Show/Hide Toggle */
+.cc-password-wrap {
+  position: relative;
+}
+
+.cc-password-input {
+  padding-right: 3rem !important;
+}
+
+.cc-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.35rem;
+  transform: translateY(-50%);
+  min-width: 40px;
+  min-height: 38px;
+  padding: 0;
+  border: none;
+  border-radius: 0.4rem;
+  background-color: transparent;
+  color: var(--cc-brown);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.cc-password-toggle:hover {
+  color: var(--cc-terracotta);
+  background-color: var(--cc-soft-tint);
+}
+
+.cc-password-toggle:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+}
+
+/* Remember Me Checkbox */
+.cc-checkbox {
+  border-color: var(--cc-brown);
+  cursor: pointer;
+}
+
+.cc-checkbox:checked {
+  background-color: var(--cc-brown);
+  border-color: var(--cc-brown);
+}
+
+.cc-checkbox:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.cc-remember-label {
+  cursor: pointer;
+  font-size: 0.92rem;
+}
+
+/* Field Validation States & Hints */
+.cc-input.is-invalid {
+  border-color: var(--cc-error);
+}
+
+.cc-input.is-invalid:focus {
+  border-color: var(--cc-error);
+  box-shadow: 0 0 0 0.2rem rgba(192, 57, 43, 0.16);
+}
+
+.cc-input.is-valid {
+  border-color: var(--cc-sage);
+}
+
+.cc-input.is-valid:focus {
+  border-color: var(--cc-sage);
+  box-shadow: 0 0 0 0.2rem rgba(109, 137, 99, 0.18);
+}
+
+.cc-field-hint {
+  font-size: 0.82rem;
+  color: var(--cc-dark-text);
+}
+
+.cc-field-error {
+  min-height: 1.2rem;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--cc-error);
+}
+
+/* Submit & Focus States */
+.cc-submit-btn {
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.btn-cc-primary:focus-visible,
+.btn-cc-secondary:focus-visible,
+.cc-input:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+}
+
+/* Switch Form Prompt & Button Link */
+.cc-switch-prompt {
+  font-size: 0.92rem;
+  color: var(--cc-dark-text);
+}
+
+.cc-switch-link {
+  background: none;
+  border: none;
+  padding: 0 0.2rem;
+  color: var(--cc-brown);
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.cc-switch-link:hover {
+  color: var(--cc-terracotta);
+}
+
+.cc-switch-link:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+}
+
+/* Mobile Tab Switcher */
+.cc-mobile-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  background-color: var(--cc-white);
+  border: 1px solid var(--cc-border);
+  border-radius: 0.75rem;
+  padding: 0.35rem;
+}
+
+.cc-mobile-tab {
+  border: none;
+  border-radius: 0.55rem;
+  padding: 0.65rem 1rem;
+  background-color: transparent;
+  color: var(--cc-brown);
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.cc-mobile-tab:hover {
+  background-color: var(--cc-soft-tint);
+}
+
+.cc-mobile-tab.active {
+  background-color: var(--cc-brown);
+  color: var(--cc-white);
+  font-weight: 600;
+}
+
+.cc-mobile-tab:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+}
+
+/* On mobile/tablet (< 992px), show only the active auth column */
+@media (max-width: 991.98px) {
+  .cc-auth-col {
+    display: none;
+  }
+
+  .cc-auth-col.is-mobile-active {
+    display: block;
+  }
+}
+
+/* State 2: Login Error Panel */
+.cc-login-error-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.25rem;
+  background-color: rgba(192, 57, 43, 0.06);
+  border: 1px solid var(--cc-error);
+  border-radius: 0.75rem;
+}
+
+.cc-error-panel-title {
+  font-size: 1.4rem;
+  color: var(--cc-error);
+}
+
+.cc-error-panel-text {
+  color: var(--cc-dark-text);
+  font-size: 0.94rem;
+  max-width: 24rem;
+}
+
+/* State 3 & State 4: Success & Already Logged-In Cards */
+.cc-status-wrap {
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.cc-status-card {
+  box-shadow: 0 8px 24px rgba(116, 61, 43, 0.08);
+}
+
+.cc-status-icon {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-status-icon-error {
+  background-color: rgba(192, 57, 43, 0.12);
+  color: var(--cc-error);
+}
+
+.cc-status-icon-success {
+  background-color: rgba(109, 137, 99, 0.16);
+  color: var(--cc-sage);
+  border: 2px solid var(--cc-sage);
+}
+
+.cc-status-icon-account {
+  background-color: var(--cc-soft-tint);
+  color: var(--cc-brown);
+  border: 2px solid var(--cc-border);
+}
+
+.cc-status-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.cc-status-text {
+  color: var(--cc-dark-text);
+  font-size: 0.98rem;
+}
+
+.cc-session-badge {
+  background-color: var(--cc-cream);
+  border: 1px solid var(--cc-border);
+  color: var(--cc-dark-text);
+  border-radius: 999px;
+  padding: 0.3rem 0.95rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* State 4: Logged-In Header Account Button & Dropdown */
+.cc-header-user-name {
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.cc-dropdown-user-label {
+  color: var(--cc-brown);
+  font-size: 0.85rem;
+}
+
+.cc-dropdown-logout {
+  color: var(--cc-error);
+  font-weight: 500;
+}
+
+.cc-dropdown-logout:hover,
+.cc-dropdown-logout:focus {
+  color: var(--cc-error);
+  background-color: rgba(192, 57, 43, 0.08);
+}
