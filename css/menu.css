@@ -1,0 +1,110 @@
+/* ==========================================================================
+   Crave Corner - Menu Page Stylesheet (css/menu.css)
+   Page-specific styles using only CSS variables defined in css/style.css.
+   ========================================================================== */
+
+/* Search bar spacing */
+.cc-menu-search-wrap {
+  max-width: 34rem;
+}
+
+.cc-menu-search-wrap .cc-input:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+}
+
+/* Category filter bar */
+.cc-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.cc-filter-btn:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+}
+
+.cc-filter-btn[aria-pressed="true"] {
+  background-color: var(--cc-brown);
+  border-color: var(--cc-brown);
+  color: var(--cc-white);
+  font-weight: 600;
+}
+
+.cc-filter-btn[aria-pressed="true"]:hover,
+.cc-filter-btn[aria-pressed="true"]:focus-visible {
+  background-color: var(--cc-brown-hover);
+  border-color: var(--cc-brown-hover);
+  color: var(--cc-white);
+}
+
+/* Menu dish cards */
+.cc-menu-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.35rem;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.cc-menu-card:hover {
+  border-color: var(--cc-terracotta);
+  transform: translateY(-2px);
+}
+
+.cc-menu-category {
+  display: inline-block;
+  color: var(--cc-dark-text);
+  background-color: var(--cc-cream);
+  border: 1px solid var(--cc-border);
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.cc-menu-title {
+  color: var(--cc-brown);
+  font-size: 1.2rem;
+  margin-top: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.cc-menu-single-price {
+  font-size: 1.1rem;
+  margin-top: auto;
+}
+
+/* Pizza size breakdown */
+.cc-pizza-sizes {
+  list-style: none;
+  margin: 0;
+  padding: 0.65rem 0 0;
+  border-top: 1px solid var(--cc-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cc-pizza-size-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 0.92rem;
+}
+
+.cc-pizza-size-label {
+  color: var(--cc-dark-text);
+}
+
+/* Empty search/filter state */
+.cc-menu-empty {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: var(--cc-dark-text);
+  background-color: var(--cc-white);
+  border: 1px solid var(--cc-border);
+  border-radius: 0.75rem;
+}
