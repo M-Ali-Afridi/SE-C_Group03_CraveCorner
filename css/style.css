@@ -1,26 +1,34 @@
 /* ==========================================================================
    Crave Corner - Shared Stylesheet (css/style.css)
-   Defines the site-wide color palette, sticky footer layout,
-   shared navbar styles, and shared footer styles.
+   Implements the official Crave Corner colour palette, typography,
+   header/footer styling, consistent buttons, and form/input styles.
    ========================================================================== */
 
-/* 1. Color Variables (Brand Palette) */
+/* 1. Brand Colour Palette & Typography Variables */
 :root {
-  --cc-primary: #c82333;       /* Red primary for brand accents, buttons, active states */
-  --cc-primary-dark: #a71d2a;  /* Darker red for hover/focus states */
-  --cc-accent: #f59e0b;        /* Warm amber accent for highlights and badges */
-  --cc-charcoal: #212529;      /* Charcoal background for the footer */
-  --cc-cream: #fff8f0;         /* Warm cream background for pages */
-  --cc-surface: #ffffff;       /* Clean white surface for navbar and cards */
-  --cc-text: #2b2d42;          /* Dark slate text for high readability */
-  --cc-muted: #6c757d;         /* Muted gray for secondary text */
-  --cc-border: #eadfd2;        /* Soft warm border color */
+  --cc-brown: #743D2B;       /* Dark Brown: main colour, headings, navigation */
+  --cc-terracotta: #C66B45;  /* Terracotta Orange: buttons, highlights, prices */
+  --cc-cream: #F8F1E7;       /* Cream: main page background */
+  --cc-white: #FFFFFF;       /* White: cards and forms */
+  --cc-dark-text: #49352B;   /* Dark Text: paragraphs and labels */
+  --cc-sage: #6D8963;        /* Sage Green: success messages */
+  --cc-error: #C0392B;       /* Red: error messages */
+
+  /* Derived shades from the brand palette for borders and hover states */
+  --cc-brown-hover: #5C2F21;
+  --cc-border: rgba(116, 61, 43, 0.25);
+  --cc-soft-tint: rgba(116, 61, 43, 0.08);
+
+  /* Fonts (only Playfair Display and Poppins) */
+  --cc-font-heading: 'Playfair Display', Georgia, serif;
+  --cc-font-body: 'Poppins', sans-serif;
 }
 
-/* 2. Base Layout (Sticky Footer using Flexbox) */
+/* 2. Global Typography & Sticky-Footer Layout */
 body {
   background-color: var(--cc-cream);
-  color: var(--cc-text);
+  color: var(--cc-dark-text);
+  font-family: var(--cc-font-body);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -30,154 +38,273 @@ main {
   flex: 1;
 }
 
-/* 3. Shared Header & Navigation Bar */
+h1, h2, h3, h4, h5, h6,
+.cc-heading {
+  font-family: var(--cc-font-heading);
+  color: var(--cc-brown);
+}
+
+p, label, input, select, textarea, button, a, li {
+  font-family: var(--cc-font-body);
+}
+
+p, label, .form-label {
+  color: var(--cc-dark-text);
+}
+
+/* Highlights and prices use Terracotta Orange */
+.cc-highlight,
+.cc-price {
+  color: var(--cc-terracotta);
+  font-weight: 600;
+}
+
+/* 3. Shared Header / Navigation Bar */
 .cc-navbar {
-  background-color: var(--cc-surface);
-  border-bottom: 2px solid var(--cc-border);
+  background-color: var(--cc-white);
+  border-bottom: 1px solid var(--cc-border);
 }
 
 .cc-brand {
-  color: var(--cc-primary);
+  font-family: var(--cc-font-heading);
+  color: var(--cc-brown);
   font-weight: 700;
-  font-size: 1.4rem;
-  letter-spacing: -0.02em;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  text-decoration: none;
 }
 
 .cc-brand:hover,
 .cc-brand:focus {
-  color: var(--cc-primary-dark);
+  color: var(--cc-terracotta);
 }
 
 .cc-navbar .nav-link {
-  color: var(--cc-text);
+  color: var(--cc-brown);
+  font-family: var(--cc-font-body);
   font-weight: 500;
-  padding: 0.5rem 0.85rem;
-  border-radius: 0.375rem;
+  font-size: 0.95rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.5rem;
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .cc-navbar .nav-link:hover,
 .cc-navbar .nav-link:focus {
-  color: var(--cc-primary);
-  background-color: rgba(200, 35, 51, 0.06);
+  color: var(--cc-terracotta);
+  background-color: var(--cc-soft-tint);
 }
 
-/* Highlight the active page link */
+/* Highlight currently selected page/section */
 .cc-navbar .nav-link.active {
-  color: var(--cc-primary);
-  font-weight: 700;
-  background-color: rgba(200, 35, 51, 0.1);
+  color: var(--cc-white);
+  background-color: var(--cc-brown);
+  font-weight: 600;
 }
 
-/* Favorites heart icon button */
-.cc-heart-link {
-  color: var(--cc-text);
+/* Right-side header icon controls (Heart, Account, Cart) */
+.cc-icon-btn {
+  color: var(--cc-brown);
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  padding: 0.45rem 0.65rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.45rem 0.65rem;
-  border-radius: 999px;
+  gap: 0.35rem;
   text-decoration: none;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.cc-heart-link:hover,
-.cc-heart-link:focus,
-.cc-heart-link.active {
-  color: var(--cc-primary);
-  background-color: rgba(200, 35, 51, 0.1);
+.cc-icon-btn:hover,
+.cc-icon-btn:focus {
+  color: var(--cc-terracotta);
+  background-color: var(--cc-soft-tint);
 }
 
-.cc-heart-link.active svg {
-  fill: var(--cc-primary);
+.cc-icon-btn.active {
+  color: var(--cc-terracotta);
+  border-color: var(--cc-terracotta);
+  background-color: var(--cc-cream);
 }
 
-/* Cart pill link */
-.cc-cart-pill {
-  background-color: var(--cc-accent);
-  color: #1f1a14;
+/* Heart icon: outline by default, filled primary red with slight scale on hover/focus */
+.cc-heart-btn svg {
+  transition: transform 0.2s ease, fill 0.2s ease, color 0.2s ease;
+}
+
+.cc-heart-btn:hover,
+.cc-heart-btn:focus,
+.cc-heart-btn.active {
+  color: var(--cc-error);
+}
+
+.cc-heart-btn:hover svg,
+.cc-heart-btn:focus svg {
+  fill: var(--cc-error);
+  transform: scale(1.15);
+}
+
+.cc-heart-btn.active svg {
+  fill: var(--cc-error);
+}
+
+.cc-cart-badge {
+  background-color: var(--cc-terracotta);
+  color: var(--cc-white);
+  font-size: 0.75rem;
   font-weight: 600;
-  border: 1px solid transparent;
-  transition: background-color 0.15s ease, transform 0.1s ease;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  line-height: 1.2;
 }
 
-.cc-cart-pill:hover,
-.cc-cart-pill:focus {
-  background-color: #d98806;
-  color: #1f1a14;
+/* 4. Consistent Buttons (Primary & Secondary) */
+.btn-cc-primary,
+.btn-cc-secondary {
+  font-family: var(--cc-font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.55rem 1.25rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
-.cc-cart-pill.active {
-  border-color: var(--cc-primary);
-  box-shadow: 0 0 0 0.15rem rgba(200, 35, 51, 0.25);
+/* Primary button: Dark brown background with white text */
+.btn-cc-primary {
+  background-color: var(--cc-brown);
+  border: 1px solid var(--cc-brown);
+  color: var(--cc-white);
 }
 
-/* Login / Account button */
-.cc-login-btn {
-  background-color: var(--cc-primary);
-  border-color: var(--cc-primary);
-  color: #ffffff;
-  font-weight: 600;
+.btn-cc-primary:hover,
+.btn-cc-primary:focus {
+  background-color: var(--cc-brown-hover);
+  border-color: var(--cc-brown-hover);
+  color: var(--cc-white);
 }
 
-.cc-login-btn:hover,
-.cc-login-btn:focus,
-.cc-login-btn.active {
-  background-color: var(--cc-primary-dark);
-  border-color: var(--cc-primary-dark);
-  color: #ffffff;
+/* Secondary button: White/cream background with brown border and text */
+.btn-cc-secondary {
+  background-color: var(--cc-white);
+  border: 1px solid var(--cc-brown);
+  color: var(--cc-brown);
 }
 
-/* 4. Shared Footer */
+.btn-cc-secondary:hover,
+.btn-cc-secondary:focus {
+  background-color: var(--cc-cream);
+  border-color: var(--cc-brown);
+  color: var(--cc-brown);
+}
+
+/* 5. Cards & Sections */
+.cc-card {
+  background-color: var(--cc-white);
+  border: 1px solid var(--cc-border);
+  border-radius: 0.75rem;
+}
+
+/* 6. Input Fields and Forms */
+.cc-input,
+.form-control.cc-input,
+.form-select.cc-input {
+  background-color: var(--cc-white);
+  color: var(--cc-dark-text);
+  border: 1px solid var(--cc-border);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.85rem;
+  font-family: var(--cc-font-body);
+  font-size: 0.95rem;
+}
+
+.cc-input::placeholder {
+  color: rgba(73, 53, 43, 0.55);
+}
+
+.cc-input:focus,
+.form-control.cc-input:focus,
+.form-select.cc-input:focus {
+  background-color: var(--cc-white);
+  color: var(--cc-dark-text);
+  border-color: var(--cc-brown);
+  box-shadow: 0 0 0 0.2rem rgba(116, 61, 43, 0.15);
+}
+
+/* Form feedback messages */
+.cc-msg-error {
+  color: var(--cc-error);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.cc-msg-success {
+  color: var(--cc-sage);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.cc-alert-success {
+  background-color: rgba(109, 137, 99, 0.14);
+  border: 1px solid var(--cc-sage);
+  color: var(--cc-dark-text);
+  border-radius: 0.5rem;
+}
+
+.cc-alert-error {
+  background-color: rgba(192, 57, 43, 0.1);
+  border: 1px solid var(--cc-error);
+  color: var(--cc-error);
+  border-radius: 0.5rem;
+}
+
+/* 7. Shared Footer */
 .cc-footer {
-  background-color: var(--cc-charcoal);
-  color: #e9ecef;
+  background-color: var(--cc-brown);
+  color: var(--cc-cream);
 }
 
 .cc-footer-brand {
-  color: var(--cc-accent);
+  font-family: var(--cc-font-heading);
+  color: var(--cc-white);
   font-weight: 700;
 }
 
 .cc-footer-heading {
-  color: #ffffff;
+  font-family: var(--cc-font-heading);
+  color: var(--cc-white);
   font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.05em;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
 }
 
 .cc-footer-text {
-  color: #ced4da;
-  font-size: 0.95rem;
+  color: var(--cc-cream);
+  font-size: 0.92rem;
 }
 
 .cc-footer-link {
-  color: #ced4da;
+  color: var(--cc-cream);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   transition: color 0.15s ease;
 }
 
 .cc-footer-link:hover,
 .cc-footer-link:focus,
 .cc-footer-link.active {
-  color: var(--cc-accent);
+  color: var(--cc-terracotta);
   text-decoration: underline;
 }
 
 .cc-footer-divider {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(248, 241, 231, 0.25);
 }
 
 .cc-footer-copy {
-  color: #adb5bd;
-  font-size: 0.9rem;
-}
-
-/* 5. Placeholder Hero Card (used on index.html) */
-.cc-placeholder-card {
-  background-color: var(--cc-surface);
-  border: 1px solid var(--cc-border);
-  border-top: 4px solid var(--cc-primary);
+  color: var(--cc-cream);
+  font-size: 0.88rem;
 }

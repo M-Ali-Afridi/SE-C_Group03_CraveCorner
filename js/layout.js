@@ -31,20 +31,7 @@
   }
 
   /**
-   * Escapes special HTML characters before inserting user-supplied strings.
-   */
-  function escapeHtml(text) {
-    return String(text)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
-  }
-
-  /**
    * Reads the cart item count from localStorage key "cc_cart".
-   * Supports an array of cart items (summing qty/quantity) or a plain number.
    */
   function getCartCount() {
     try {
@@ -76,73 +63,40 @@
   }
 
   /**
-   * Reads the signed-in user from localStorage key "cc_user".
-   * Returns the display name if logged in, or null if no user is logged in.
+   * Builds the Account icon Bootstrap dropdown with exactly two options:
+   * "Login / Sign Up" and "My Account & Order History".
    */
-  function getUserName() {
-    try {
-      var rawUser = localStorage.getItem("cc_user");
-      if (!rawUser || rawUser === "null" || rawUser === "undefined") {
-        return null;
-      }
+  function buildAccountDropdownHtml(paths) {
+    var accountSvg =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" ' +
+        'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>' +
+        '<circle cx="12" cy="7" r="4"></circle>' +
+      "</svg>";
 
-      var parsedUser = JSON.parse(rawUser);
-      if (typeof parsedUser === "string" && parsedUser.trim() !== "") {
-        return parsedUser.trim();
-      }
-
-      if (parsedUser && typeof parsedUser === "object") {
-        var name =
-          parsedUser.name ||
-          parsedUser.firstName ||
-          parsedUser.fullName ||
-          parsedUser.username ||
-          "Guest";
-        return String(name).trim() || "Guest";
-      }
-    } catch (error) {
-      // Fallback if cc_user was saved as plain text instead of JSON
-      var plainName = localStorage.getItem("cc_user");
-      if (plainName && plainName.trim() !== "") {
-        return plainName.trim();
-      }
-    }
-
-    return null;
-  }
-
-  /**
-   * Builds the HTML string for the Login button or the "Hi, Name" user dropdown.
-   */
-  function buildAccountControlHtml(paths) {
-    var userName = getUserName();
-
-    if (!userName) {
-      var loginActive = isCurrentPage("login.html", paths.currentFile) ? " active" : "";
-      var loginAria = loginActive ? ' aria-current="page"' : "";
-
-      return (
-        '<a class="btn cc-login-btn' + loginActive + '" href="' + paths.toPages + 'login.html"' + loginAria + ">" +
-          '<span class="d-none d-lg-inline">Login</span>' +
-          '<span class="d-lg-none">Login / Sign Up</span>' +
-        "</a>"
-      );
-    }
-
-    var accountActive = isCurrentPage("account.html", paths.currentFile) ? " active" : "";
-    var favActive = isCurrentPage("favorites.html", paths.currentFile) ? " active" : "";
+    var loginActive = isCurrentPage("login.html", paths.currentFile);
+    var accountActive = isCurrentPage("account.html", paths.currentFile);
+    var isAccountSection = loginActive || accountActive;
 
     return (
       '<div class="dropdown">' +
-        '<button class="btn cc-login-btn dropdown-toggle" type="button" id="ccUserDropdown" ' +
-          'data-bs-toggle="dropdown" aria-expanded="false">' +
-          "Hi, " + escapeHtml(userName) +
+        '<button class="cc-icon-btn' + (isAccountSection ? " active" : "") + '" type="button" id="ccAccountDropdown" ' +
+          'data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account" title="Account">' +
+          accountSvg +
         "</button>" +
-        '<ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="ccUserDropdown">' +
-          '<li><a class="dropdown-item' + accountActive + '" href="' + paths.toPages + 'account.html">My Account &amp; Orders</a></li>' +
-          '<li><a class="dropdown-item' + favActive + '" href="' + paths.toPages + 'favorites.html">Favorites</a></li>' +
-          '<li><hr class="dropdown-divider"></li>' +
-          '<li><button type="button" class="dropdown-item text-danger" id="cc-logout-btn">Log out</button></li>' +
+        '<ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="ccAccountDropdown">' +
+          '<li>' +
+            '<a class="dropdown-item' + (loginActive ? " active" : "") + '" href="' + paths.toPages + 'login.html"' +
+              (loginActive ? ' aria-current="page"' : "") + ">" +
+              "Login / Sign Up" +
+            "</a>" +
+          "</li>" +
+          '<li>' +
+            '<a class="dropdown-item' + (accountActive ? " active" : "") + '" href="' + paths.toPages + 'account.html"' +
+              (accountActive ? ' aria-current="page"' : "") + ">" +
+              "My Account &amp; Order History" +
+            "</a>" +
+          "</li>" +
         "</ul>" +
       "</div>"
     );
@@ -150,6 +104,8 @@
 
   /**
    * Builds the complete shared navigation bar HTML string.
+   * Logo on top-left; Home, Menu, Deals, Reserve, Catering in nav;
+   * Heart, Account dropdown, and Cart icons stay visible on the right.
    */
   function buildHeaderHtml(paths) {
     var navItems = [
@@ -180,34 +136,46 @@
     var cartActive = isCurrentPage("cart.html", paths.currentFile);
     var cartCount = getCartCount();
 
+    var heartSvg =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" ' +
+        'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>' +
+      "</svg>";
+
+    var cartSvg =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" ' +
+        'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<circle cx="9" cy="21" r="1"></circle>' +
+        '<circle cx="20" cy="21" r="1"></circle>' +
+        '<path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>' +
+      "</svg>";
+
     return (
       '<nav class="navbar navbar-expand-lg cc-navbar py-2" aria-label="Main navigation">' +
         '<div class="container">' +
           '<a class="navbar-brand cc-brand" href="' + paths.toRoot + 'index.html">Crave Corner</a>' +
-          '<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ccMainNavbar" ' +
-            'aria-controls="ccMainNavbar" aria-expanded="false" aria-label="Toggle navigation">' +
-            '<span class="navbar-toggler-icon"></span>' +
-          "</button>" +
-          '<div class="collapse navbar-collapse" id="ccMainNavbar">' +
-            '<ul class="navbar-nav mx-auto mb-3 mb-lg-0 gap-lg-1 text-center">' +
+          '<div class="d-flex align-items-center gap-1 order-lg-3">' +
+            '<a class="cc-icon-btn cc-heart-btn' + (favActive ? " active" : "") + '" ' +
+              'href="' + paths.toPages + 'favorites.html" aria-label="Favourites" title="Favourites"' +
+              (favActive ? ' aria-current="page"' : "") + ">" +
+              heartSvg +
+            "</a>" +
+            buildAccountDropdownHtml(paths) +
+            '<a class="cc-icon-btn' + (cartActive ? " active" : "") + '" ' +
+              'href="' + paths.toPages + 'cart.html" aria-label="Cart" title="Cart"' +
+              (cartActive ? ' aria-current="page"' : "") + ">" +
+              cartSvg +
+              '<span class="cc-cart-badge" id="cc-cart-count">' + cartCount + "</span>" +
+            "</a>" +
+            '<button class="navbar-toggler ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#ccMainNavbar" ' +
+              'aria-controls="ccMainNavbar" aria-expanded="false" aria-label="Toggle navigation">' +
+              '<span class="navbar-toggler-icon"></span>' +
+            "</button>" +
+          "</div>" +
+          '<div class="collapse navbar-collapse order-lg-2" id="ccMainNavbar">' +
+            '<ul class="navbar-nav mx-auto mt-3 mt-lg-0 gap-lg-1 text-center">' +
               navLinksHtml +
             "</ul>" +
-            '<div class="d-flex flex-column flex-lg-row align-items-center gap-2">' +
-              '<a class="cc-heart-link' + (favActive ? " active" : "") + '" ' +
-                'href="' + paths.toPages + 'favorites.html" ' +
-                'aria-label="Favorites"' + (favActive ? ' aria-current="page"' : "") + ">" +
-                '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" ' +
-                  'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-                  '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>' +
-                "</svg>" +
-                '<span class="d-lg-none ms-2">Favorites</span>' +
-              "</a>" +
-              '<a class="btn cc-cart-pill rounded-pill px-3' + (cartActive ? " active" : "") + '" ' +
-                'href="' + paths.toPages + 'cart.html"' + (cartActive ? ' aria-current="page"' : "") + ">" +
-                'Cart (<span id="cc-cart-count">' + cartCount + "</span>)" +
-              "</a>" +
-              buildAccountControlHtml(paths) +
-            "</div>" +
           "</div>" +
         "</div>" +
       "</nav>"
@@ -215,7 +183,7 @@
   }
 
   /**
-   * Builds the complete shared footer HTML string (3 columns on desktop, 1 centered on mobile).
+   * Builds the shared 3-column footer HTML string.
    */
   function buildFooterHtml(paths) {
     var quickLinks = [
@@ -269,7 +237,7 @@
   }
 
   /**
-   * Renders the shared header into #site-header and wires up the Log out button.
+   * Renders the shared header into #site-header.
    */
   function renderHeader() {
     var headerEl = document.getElementById("site-header");
@@ -279,14 +247,6 @@
 
     var paths = getPathInfo();
     headerEl.innerHTML = buildHeaderHtml(paths);
-
-    var logoutBtn = document.getElementById("cc-logout-btn");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", function () {
-        localStorage.removeItem("cc_user");
-        renderHeader();
-      });
-    }
   }
 
   /**
@@ -303,7 +263,7 @@
   }
 
   /**
-   * Updates only the cart count number in the header (useful for menu/cart pages).
+   * Updates only the cart count badge in the header.
    */
   function updateCartCount() {
     var cartCountEl = document.getElementById("cc-cart-count");
@@ -312,25 +272,20 @@
     }
   }
 
-  // Expose helper functions so individual pages can refresh the header after cart/login changes
   window.ccLayout = {
     renderHeader: renderHeader,
     renderFooter: renderFooter,
     updateCartCount: updateCartCount
   };
 
-  // Build shared header and footer once the HTML document is ready
   document.addEventListener("DOMContentLoaded", function () {
     renderHeader();
     renderFooter();
   });
 
-  // Sync header cart/user display if localStorage changes in another tab
   window.addEventListener("storage", function (event) {
     if (event.key === "cc_cart") {
       updateCartCount();
-    } else if (event.key === "cc_user") {
-      renderHeader();
     }
   });
 })();
