@@ -222,7 +222,107 @@ function showTotals(totals) {
 }
 
 /* ================================================================
-   INITIALISATION — entry point (Phase 1: summary only)
+   DELIVERY TYPE TOGGLE
+   ================================================================ */
+
+// Called when the delivery/pickup radio changes.
+// Shows or hides the delivery address field and recalculates the total.
+function chooseDeliveryType() {
+    var deliveryRadio = document.querySelector('[name="deliveryType"][value="delivery"]');
+    var addressGroup  = document.getElementById("address-group");
+    var isDelivery    = deliveryRadio && deliveryRadio.checked;
+
+    if (addressGroup) {
+        addressGroup.style.display = isDelivery ? "" : "none";
+    }
+
+    var cartItems = loadCart();
+    var totals    = calculateTotals(cartItems, isDelivery);
+    showTotals(totals);
+
+    saveFormValues();
+}
+
+/* ================================================================
+   FORM PERSISTENCE
+   ================================================================ */
+
+// Save all form field values to localStorage so they survive a reload
+function saveFormValues() {
+    try {
+        var nameField  = document.getElementById("customer-name");
+        var emailField = document.getElementById("customer-email");
+        var phoneField = document.getElementById("customer-phone");
+        var addrField  = document.getElementById("customer-address");
+        var payRadio   = document.querySelector('[name="paymentMethod"]:checked');
+        var delRadio   = document.querySelector('[name="deliveryType"]:checked');
+
+        var formData = {
+            name:         nameField  ? nameField.value  : "",
+            email:        emailField ? emailField.value : "",
+            phone:        phoneField ? phoneField.value : "",
+            address:      addrField  ? addrField.value  : "",
+            payment:      payRadio   ? payRadio.value   : "",
+            deliveryType: delRadio   ? delRadio.value   : "delivery"
+        };
+        localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(formData));
+    } catch (e) {
+        // Silently ignore storage errors
+    }
+}
+
+// Restore saved form values from localStorage on page load
+function loadFormValues() {
+    var raw = "";
+    try {
+        raw = localStorage.getItem(FORM_STORAGE_KEY);
+    } catch (e) {
+        return;
+    }
+    if (!raw) { return; }
+
+    var data = {};
+    try {
+        data = JSON.parse(raw);
+    } catch (e) {
+        return;
+    }
+
+    var nameField  = document.getElementById("customer-name");
+    var emailField = document.getElementById("customer-email");
+    var phoneField = document.getElementById("customer-phone");
+    var addrField  = document.getElementById("customer-address");
+
+    if (nameField  && data.name)    { nameField.value  = data.name;    }
+    if (emailField && data.email)   { emailField.value = data.email;   }
+    if (phoneField && data.phone)   { phoneField.value = data.phone;   }
+    if (addrField  && data.address) { addrField.value  = data.address; }
+
+    if (data.payment) {
+        var payRadio = document.querySelector('[name="paymentMethod"][value="' + data.payment + '"]');
+        if (payRadio) { payRadio.checked = true; }
+    }
+
+    if (data.deliveryType) {
+        var delRadio = document.querySelector('[name="deliveryType"][value="' + data.deliveryType + '"]');
+        if (delRadio) { delRadio.checked = true; }
+    }
+
+    // Apply the restored delivery type (show/hide address, recalc fee)
+    chooseDeliveryType();
+}
+
+/* ================================================================
+   NAVIGATION HELPERS
+   ================================================================ */
+
+// Navigate back to the cart page
+function goBackToCart() {
+    window.location.href = CART_URL;
+}
+
+/* ================================================================
+   INITIALISATION — entry point (Phase 2: + delivery toggle)
    ================================================================ */
 function initCheckoutPage() {
     var cartItems = loadCart();
@@ -239,7 +339,7 @@ function initCheckoutPage() {
         var emptyBackBtn = document.getElementById("empty-back-to-cart-btn");
         if (emptyBackBtn) {
             emptyBackBtn.addEventListener("click", function () {
-                window.location.href = CART_URL;
+                goBackToCart();
             });
         }
         return;
@@ -251,11 +351,38 @@ function initCheckoutPage() {
 
     showOrderItems(cartItems);
 
-    // Default: delivery is selected, so calculate with delivery fee
+    // Restore saved form values and trigger delivery toggle
+    loadFormValues();
+
+    // Calculate and show totals (chooseDeliveryType is already called inside loadFormValues)
     var deliveryRadio = document.querySelector('[name="deliveryType"][value="delivery"]');
     var isDelivery    = deliveryRadio && deliveryRadio.checked;
     var totals        = calculateTotals(cartItems, isDelivery);
     showTotals(totals);
+
+    // Wire up Back to Cart button
+    var backBtn = document.getElementById("back-to-cart-btn");
+    if (backBtn) {
+        backBtn.addEventListener("click", function () {
+            goBackToCart();
+        });
+    }
+
+    // Wire up delivery type radios
+    var delRadios = document.querySelectorAll('[name="deliveryType"]');
+    for (var j = 0; j < delRadios.length; j++) {
+        delRadios[j].addEventListener("change", function () {
+            chooseDeliveryType();
+        });
+    }
+
+    // Wire up payment radios to save form values
+    var payRadios = document.querySelectorAll('[name="paymentMethod"]');
+    for (var k = 0; k < payRadios.length; k++) {
+        payRadios[k].addEventListener("change", function () {
+            saveFormValues();
+        });
+    }
 }
 
 /* ================================================================
