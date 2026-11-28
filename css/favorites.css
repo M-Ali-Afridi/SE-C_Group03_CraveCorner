@@ -1,0 +1,214 @@
+/* ==========================================================================
+   Author: M. Rehan Sadiq
+   Roll Number: 26i-3122
+   Section: Section C
+   Crave Corner - Favourites Page Stylesheet (css/favorites.css)
+   Reuses only CSS variables from css/style.css. No new colours introduced.
+   ========================================================================== */
+
+/* Page heading & subtitle */
+.cc-fav-page-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+}
+
+.cc-fav-page-subtitle {
+  color: var(--cc-dark-text);
+  font-size: 1rem;
+}
+
+/* Aria-live status strip (visually shown briefly via JS, then hidden again) */
+.cc-fav-status {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--cc-dark-text);
+  text-align: center;
+  margin-bottom: 1rem;
+  min-height: 1.4rem;
+  transition: opacity 0.25s ease;
+}
+
+/* -------------------------------------------------------------------------
+   Favourite Dish Card
+   ------------------------------------------------------------------------- */
+.cc-fav-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--cc-white);
+  border: 1px solid var(--cc-border);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 16px rgba(116, 61, 43, 0.06);
+  overflow: hidden;
+  height: 100%;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.cc-fav-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--cc-terracotta);
+}
+
+/* Image placeholder panel — same fixed height on every card */
+.cc-fav-img-placeholder {
+  width: 100%;
+  height: 180px;
+  background-color: var(--cc-soft-tint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cc-brown);
+  flex-shrink: 0;
+}
+
+/* Card body */
+.cc-fav-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.1rem 1.25rem 1.25rem;
+  gap: 0.65rem;
+}
+
+.cc-fav-dish-name {
+  font-family: var(--cc-font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cc-brown);
+  margin: 0;
+}
+
+/* Price display (and size selector updates this) */
+.cc-fav-price {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--cc-terracotta);
+  margin: 0;
+}
+
+/* Saved heart indicator */
+.cc-fav-saved-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--cc-error);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+/* Pizza size selector — inline <select> styled with existing input rules */
+.cc-fav-size-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cc-fav-size-label {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--cc-dark-text);
+  white-space: nowrap;
+}
+
+.cc-fav-size-select {
+  font-family: var(--cc-font-body);
+  font-size: 0.88rem;
+  color: var(--cc-dark-text);
+  background-color: var(--cc-white);
+  border: 1px solid var(--cc-border);
+  border-radius: 0.4rem;
+  padding: 0.3rem 0.6rem;
+  flex: 1;
+}
+
+.cc-fav-size-select:focus {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+  border-color: var(--cc-brown);
+  box-shadow: none;
+}
+
+/* Button row at the bottom of the card */
+.cc-fav-btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: auto;
+}
+
+/* Add to Cart — inherits btn-cc-primary but we ensure equal size/padding */
+.cc-fav-add-btn {
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Remove button — outline style using the existing error colour variable.
+   Identical font, padding, border-radius and size as cc-fav-add-btn. */
+.cc-fav-remove-btn {
+  font-family: var(--cc-font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--cc-error);
+  background-color: transparent;
+  color: var(--cc-error);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  line-height: 1.5;   /* matches Bootstrap button line-height */
+}
+
+.cc-fav-remove-btn:hover {
+  background-color: rgba(192, 57, 43, 0.08);
+  color: var(--cc-error);
+}
+
+/* Shared focus style for all interactive elements */
+.cc-fav-add-btn:focus-visible,
+.cc-fav-remove-btn:focus-visible,
+.cc-fav-size-select:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+}
+
+/* -------------------------------------------------------------------------
+   Empty State
+   ------------------------------------------------------------------------- */
+.cc-fav-empty {
+  border: 1px solid var(--cc-border);
+  border-radius: 0.75rem;
+  background-color: var(--cc-cream);
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.cc-fav-empty-icon {
+  color: var(--cc-brown);
+  opacity: 0.45;
+}
+
+.cc-fav-empty-title {
+  font-family: var(--cc-font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--cc-brown);
+}
+
+.cc-fav-empty-text {
+  color: var(--cc-dark-text);
+  font-size: 0.95rem;
+}
+
+/* -------------------------------------------------------------------------
+   Mobile layout: single column at 375 px, nothing scrolls sideways
+   ------------------------------------------------------------------------- */
+@media (max-width: 575.98px) {
+  .cc-fav-page-title {
+    font-size: 1.65rem;
+  }
+
+  .cc-fav-btn-row {
+    flex-direction: column;
+  }
+}
