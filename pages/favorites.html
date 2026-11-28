@@ -1,0 +1,87 @@
+<!--
+  Author: M. Rehan Sadiq
+  Roll Number: 26i-3122
+  Section: Section C
+  Crave Corner - Your Favourite Dishes Page (pages/favorites.html)
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Favourite Dishes | Crave Corner</title>
+
+  <!-- Google Fonts: Playfair Display (Headings) & Poppins (Body/UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS (Official CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Crave Corner Shared & Favourites Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/favorites.css">
+</head>
+<body>
+  <!-- Shared Header (injected by js/layout.js) -->
+  <header id="site-header"></header>
+
+  <!-- Main Page Content -->
+  <main class="container py-5">
+
+    <!-- Page Heading -->
+    <div class="text-center mb-5">
+      <h1 class="cc-fav-page-title mb-2">
+        Your Favourite Dishes
+        <span aria-hidden="true">&#10084;&#65039;</span>
+      </h1>
+      <p class="cc-fav-page-subtitle mb-0">Save Your Favourite Meals!</p>
+    </div>
+
+    <!-- Aria-live region: short status messages for cart and remove actions -->
+    <div
+      id="fav-status-msg"
+      class="cc-fav-status visually-hidden"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <!-- Favourites Grid (populated by js/favorites.js) -->
+    <div
+      id="fav-grid"
+      class="row g-4"
+      aria-label="Favourite dishes"
+    ></div>
+
+    <!-- Empty State (shown when no favourites are saved) -->
+    <div id="fav-empty-state" class="cc-fav-empty text-center p-5 d-none">
+      <div class="cc-fav-empty-icon mb-3" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      </div>
+      <p class="cc-fav-empty-title mb-2">No favourites saved yet!</p>
+      <p class="cc-fav-empty-text mb-4">
+        Browse our menu, tap the ♥ on any dish and it will appear here.
+      </p>
+      <a href="menu.html" class="btn btn-cc-primary px-4">Browse Menu</a>
+    </div>
+
+  </main>
+
+  <!-- Shared Footer (injected by js/layout.js) -->
+  <footer id="site-footer" class="cc-footer mt-auto"></footer>
+
+  <!-- Bootstrap 5 JS Bundle (Official CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Menu data (global MENU_ITEMS array) — must come before favorites.js -->
+  <script src="../js/menu-data.js"></script>
+
+  <!-- Shared Layout & Favourites Scripts -->
+  <script src="../js/layout.js"></script>
+  <script src="../js/favorites.js"></script>
+</body>
+</html>
