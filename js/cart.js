@@ -403,6 +403,10 @@ function showCart() {
   }
 
   itemsList.innerHTML = "";
+  for (var timerKey in quantityErrorTimers) {
+    clearTimeout(quantityErrorTimers[timerKey]);
+  }
+  quantityErrorTimers = {};
 
   if (cartItems.length === 0) {
     emptySection.classList.remove("d-none");
