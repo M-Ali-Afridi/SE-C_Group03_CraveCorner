@@ -147,10 +147,22 @@ function loadCart() {
   }
 }
 
+// Stores active timeout IDs so repeated clicks reset the 3-second error timer
+var quantityErrorTimers = {};
+
 // Saves the cart array safely to localStorage
 function saveCart(cartItems) {
   try {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+  } catch (error) {
+    // Ignore storage errors if browser blocks localStorage
+  }
+}
+
+// Safely removes the stored promo code from localStorage
+function clearStoredPromo() {
+  try {
+    localStorage.removeItem(PROMO_STORAGE_KEY);
   } catch (error) {
     // Ignore storage errors if browser blocks localStorage
   }
@@ -284,6 +296,9 @@ function createCartItemCard(item, index) {
   minusBtn.className = "qty-btn";
   minusBtn.textContent = "-";
   minusBtn.setAttribute("aria-label", "Decrease quantity of " + item.name);
+  minusBtn.addEventListener("click", function () {
+    decreaseQuantity(index);
+  });
 
   var qtyNumber = document.createElement("span");
   qtyNumber.className = "qty-value";
@@ -295,6 +310,9 @@ function createCartItemCard(item, index) {
   plusBtn.className = "qty-btn";
   plusBtn.textContent = "+";
   plusBtn.setAttribute("aria-label", "Increase quantity of " + item.name);
+  plusBtn.addEventListener("click", function () {
+    increaseQuantity(index);
+  });
 
   qtyBox.appendChild(minusBtn);
   qtyBox.appendChild(qtyNumber);
@@ -309,6 +327,9 @@ function createCartItemCard(item, index) {
   removeBtn.className = "remove-btn";
   removeBtn.setAttribute("aria-label", "Remove " + item.name + " from cart");
   removeBtn.title = "Remove item";
+  removeBtn.addEventListener("click", function () {
+    removeItem(index);
+  });
   removeBtn.innerHTML =
     '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" ' +
     'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
@@ -374,6 +395,77 @@ function showCart() {
   }
 
   updateCartBadge();
+}
+
+/* --------------------------------------------------------------------------
+   Quantity Stepper & Remove Functions
+   -------------------------------------------------------------------------- */
+
+// Shows an invalid quantity error under a specific product card for 3 seconds
+function showQuantityError(index) {
+  var errorEl = document.getElementById("product-error-" + index);
+  if (!errorEl) {
+    return;
+  }
+
+  errorEl.textContent = "Invalid quantity. Please enter a valid quantity.";
+  errorEl.classList.remove("d-none");
+
+  if (quantityErrorTimers[index]) {
+    clearTimeout(quantityErrorTimers[index]);
+  }
+
+  quantityErrorTimers[index] = setTimeout(function () {
+    errorEl.textContent = "";
+    errorEl.classList.add("d-none");
+  }, ERROR_DISPLAY_MS);
+}
+
+// Increases an item's quantity by 1 and refreshes the cart
+function increaseQuantity(index) {
+  var cartItems = loadCart();
+  if (index < 0 || index >= cartItems.length) {
+    return;
+  }
+
+  cartItems[index].quantity = cartItems[index].quantity + 1;
+  saveCart(cartItems);
+  showCart();
+}
+
+// Decreases an item's quantity by 1, or shows an error if quantity is already 1
+function decreaseQuantity(index) {
+  var cartItems = loadCart();
+  if (index < 0 || index >= cartItems.length) {
+    return;
+  }
+
+  if (cartItems[index].quantity <= 1) {
+    cartItems[index].quantity = 1;
+    showQuantityError(index);
+    return;
+  }
+
+  cartItems[index].quantity = cartItems[index].quantity - 1;
+  saveCart(cartItems);
+  showCart();
+}
+
+// Removes an item from the cart, clears promo if empty, and refreshes the cart
+function removeItem(index) {
+  var cartItems = loadCart();
+  if (index < 0 || index >= cartItems.length) {
+    return;
+  }
+
+  cartItems.splice(index, 1);
+  saveCart(cartItems);
+
+  if (cartItems.length === 0) {
+    clearStoredPromo();
+  }
+
+  showCart();
 }
 
 /* --------------------------------------------------------------------------
