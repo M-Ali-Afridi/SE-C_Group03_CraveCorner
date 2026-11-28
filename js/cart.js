@@ -623,52 +623,11 @@ function goToCheckout() {
 }
 
 /* --------------------------------------------------------------------------
-   Temporary Testing Helper
-   -------------------------------------------------------------------------- */
-
-// TEMP: remove before final merge
-// Adds two sample items in the shared cart contract format for testing before Menu is linked
-function addSampleItems() {
-  var sampleCart = [
-    {
-      lineId: "margherita-large-extra-cheese",
-      id: "classic-margherita-pizza",
-      name: "Margherita Pizza",
-      unitPrice: 1200,
-      price: 1200,
-      quantity: 1,
-      image: "images/margherita.jpg",
-      size: "Large",
-      addons: ["Extra Cheese"]
-    },
-    {
-      lineId: "french-fries-regular",
-      id: "regular-fries",
-      name: "French Fries",
-      unitPrice: 350,
-      price: 350,
-      quantity: 1,
-      image: "images/fries.jpg",
-      size: "",
-      addons: []
-    }
-  ];
-
-  saveCart(sampleCart);
-  showCart();
-}
-
-/* --------------------------------------------------------------------------
    Page Initialization
    -------------------------------------------------------------------------- */
 
 // Sets up initial event listeners and renders the cart when the page loads
 function initCartPage() {
-  var sampleBtn = document.getElementById("add-sample-btn");
-  if (sampleBtn) {
-    sampleBtn.addEventListener("click", addSampleItems);
-  }
-
   var applyPromoBtn = document.getElementById("apply-promo-btn");
   if (applyPromoBtn) {
     applyPromoBtn.addEventListener("click", applyPromo);
