@@ -446,17 +446,12 @@
    */
   function renderSuccessView(session, isNewAccount) {
     var titleEl = document.getElementById("auth-success-title");
-    var subtitleEl = document.getElementById("auth-success-subtitle");
     var successView = document.getElementById("auth-success-view");
 
     if (titleEl) {
       titleEl.textContent = isNewAccount
         ? "Account Created! Welcome, " + session.firstName + "!"
         : "Login Successful! Welcome Back, " + session.firstName + "!";
-    }
-    if (subtitleEl) {
-      subtitleEl.textContent =
-        "You are signed in as " + session.email + ". Ready to explore Crave Corner?";
     }
 
     showPageView("success");
@@ -470,21 +465,10 @@
    */
   function renderLoggedInView(session) {
     var titleEl = document.getElementById("loggedin-title");
-    var detailsEl = document.getElementById("loggedin-details");
-    var sessionNoteEl = document.getElementById("loggedin-session-note");
     var loggedInView = document.getElementById("auth-loggedin-view");
 
     if (titleEl) {
-      titleEl.textContent = "Welcome Back, " + session.firstName + "!";
-    }
-    if (detailsEl) {
-      detailsEl.textContent =
-        "You are currently signed in as " + session.fullName + " (" + session.email + ").";
-    }
-    if (sessionNoteEl) {
-      sessionNoteEl.textContent = session.rememberMe
-        ? "Remember Me is active (saved across reloads)"
-        : "Active for this browser session only";
+      titleEl.textContent = "Hello, " + session.firstName + "!";
     }
 
     showPageView("loggedin");

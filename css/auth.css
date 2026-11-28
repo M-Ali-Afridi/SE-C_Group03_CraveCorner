@@ -53,7 +53,20 @@
 }
 
 .cc-password-input {
-  padding-right: 3rem !important;
+  padding-right: 3.1rem !important;
+}
+
+/* Hide browser's built-in password reveal icon (Edge / Chromium) */
+.cc-password-input::-ms-reveal,
+.cc-password-input::-ms-clear {
+  display: none;
+}
+
+/* Place validation icon immediately left of the eye toggle so they never overlap */
+.cc-password-input.is-invalid,
+.cc-password-input.is-valid {
+  background-position: right 3.1rem center;
+  padding-right: 4.9rem !important;
 }
 
 .cc-password-toggle {
