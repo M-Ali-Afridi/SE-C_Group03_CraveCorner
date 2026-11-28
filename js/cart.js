@@ -50,6 +50,7 @@ const ERROR_DISPLAY_MS = 3000;
 
 // Page filenames assumed across the group repository (pages/ folder)
 const HOME_PAGE = "../index.html";
+// Menu page filename (also used as fallback if Back is clicked with no history)
 const MENU_PAGE = "menu.html";
 const DISH_DETAILS_PAGE = "dish-details.html";
 const DEALS_PAGE = "deals.html";
@@ -622,12 +623,26 @@ function goToCheckout() {
   window.location.href = CHECKOUT_PAGE;
 }
 
+// Goes back to the previous page if history exists, otherwise opens menu.html
+function goBack() {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = MENU_PAGE;
+  }
+}
+
 /* --------------------------------------------------------------------------
    Page Initialization
    -------------------------------------------------------------------------- */
 
 // Sets up initial event listeners and renders the cart when the page loads
 function initCartPage() {
+  var backBtn = document.getElementById("back-btn");
+  if (backBtn) {
+    backBtn.addEventListener("click", goBack);
+  }
+
   var applyPromoBtn = document.getElementById("apply-promo-btn");
   if (applyPromoBtn) {
     applyPromoBtn.addEventListener("click", applyPromo);

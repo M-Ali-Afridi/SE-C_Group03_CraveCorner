@@ -23,6 +23,22 @@
   margin: 0 auto;
 }
 
+/* Back Button above Cart Title */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--cc-font-body);
+  min-height: 44px;
+  padding: 0.45rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.back-btn:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+}
+
 .cart-title {
   font-family: var(--cc-font-heading);
   color: var(--cc-brown);
