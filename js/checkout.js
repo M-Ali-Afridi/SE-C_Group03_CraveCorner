@@ -551,6 +551,102 @@ function loadFormValues() {
 }
 
 /* ================================================================
+   ORDER PLACEMENT
+   ================================================================ */
+
+// Generate a random 6-digit order ID like "CC-348291"
+function generateOrderId() {
+    return "CC-" + String(Math.floor(100000 + Math.random() * 900000));
+}
+
+// Return a human-readable label for the selected payment method radio value
+function getPaymentLabel(value) {
+    if (value === "cod")    { return "Cash on Delivery";     }
+    if (value === "card")   { return "Credit / Debit Card";  }
+    if (value === "wallet") { return "Digital Wallet";       }
+    return value;
+}
+
+// Place the order: validate, build order object, save, clear cart, redirect
+function placeOrder() {
+    var allValid = validateAll();
+    if (!allValid) {
+        return;
+    }
+
+    var cartItems = loadCart();
+    if (cartItems.length === 0) {
+        // Cart became empty — send back to cart page
+        window.location.href = CART_URL;
+        return;
+    }
+
+    var deliveryRadio = document.querySelector('[name="deliveryType"][value="delivery"]');
+    var isDelivery    = deliveryRadio && deliveryRadio.checked;
+    var totals        = calculateTotals(cartItems, isDelivery);
+
+    var payRadio   = document.querySelector('[name="paymentMethod"]:checked');
+    var nameField  = document.getElementById("customer-name");
+    var emailField = document.getElementById("customer-email");
+    var phoneField = document.getElementById("customer-phone");
+    var addrField  = document.getElementById("customer-address");
+
+    var order = {
+        orderId:      generateOrderId(),
+        date:         new Date().toISOString(),
+        customer: {
+            name:    nameField  ? nameField.value.trim()  : "",
+            email:   emailField ? emailField.value.trim() : "",
+            phone:   phoneField ? phoneField.value.trim() : "",
+            address: addrField  ? addrField.value.trim()  : ""
+        },
+        payment:      payRadio ? getPaymentLabel(payRadio.value) : "Cash on Delivery",
+        deliveryType: isDelivery ? "Delivery" : "Pickup",
+        items:        cartItems,          // copy of full normalised item objects
+        subtotal:     totals.subtotal,
+        deliveryFee:  totals.deliveryFee,
+        tax:          totals.taxAmount,
+        discount:     totals.discountAmount,
+        total:        totals.totalAmount,
+        status:       "Order Placed"
+    };
+
+    // Save the most recent order (read on the Order Confirmation page)
+    try {
+        localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(order));
+    } catch (e) { }
+
+    // Also append to the full order history list
+    try {
+        var existingRaw  = localStorage.getItem(ORDERS_LIST_KEY);
+        var existingList = [];
+        if (existingRaw) {
+            existingList = JSON.parse(existingRaw);
+        }
+        if (!Array.isArray(existingList)) {
+            existingList = [];
+        }
+        existingList.push(order);
+        localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(existingList));
+    } catch (e) { }
+
+    // Clear the cart, the promo and the saved form
+    try {
+        localStorage.removeItem(CART_STORAGE_KEY);
+        localStorage.removeItem(PROMO_STORAGE_KEY);
+        localStorage.removeItem(FORM_STORAGE_KEY);
+    } catch (e) { }
+
+    // Update the cart badge in the shared header
+    if (typeof window.ccUpdateCartBadge === "function") {
+        window.ccUpdateCartBadge();
+    }
+
+    // Redirect to the Order Confirmation page
+    window.location.href = ORDER_CONFIRMATION_URL;
+}
+
+/* ================================================================
    NAVIGATION HELPERS
    ================================================================ */
 
@@ -620,6 +716,20 @@ function initCheckoutPage() {
         payRadios[k].addEventListener("change", function () {
             validatePayment();
             saveFormValues();
+        });
+    }
+
+    // Wire up Place Order buttons (desktop panel + sticky mobile bar)
+    var placeBtn = document.getElementById("place-order-btn");
+    if (placeBtn) {
+        placeBtn.addEventListener("click", function () {
+            placeOrder();
+        });
+    }
+    var mobilePlaceBtn = document.getElementById("mobile-place-order-btn");
+    if (mobilePlaceBtn) {
+        mobilePlaceBtn.addEventListener("click", function () {
+            placeOrder();
         });
     }
 
