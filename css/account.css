@@ -1,0 +1,318 @@
+/* ==========================================================================
+   Author: M. Rehan Sadiq
+   Roll Number: 26i-3122
+   Section: Section C
+   Crave Corner - My Account & Order History Stylesheet (css/account.css)
+   Reuses only CSS variables defined in css/style.css.
+   ========================================================================== */
+
+.cc-account-section {
+  max-width: 68rem;
+  margin: 0 auto;
+}
+
+/* Left Profile Card */
+.cc-profile-card,
+.cc-orders-panel {
+  box-shadow: 0 8px 24px rgba(116, 61, 43, 0.06);
+}
+
+.cc-profile-avatar {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background-color: var(--cc-soft-tint);
+  color: var(--cc-brown);
+  border: 2px solid var(--cc-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-profile-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.cc-profile-welcome {
+  color: var(--cc-dark-text);
+  font-size: 0.96rem;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+/* Profile Navigation List */
+.cc-account-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-top: 1px solid var(--cc-border);
+  padding-top: 1.15rem;
+}
+
+.cc-account-nav-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.65rem 0.95rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: var(--cc-brown);
+  font-family: var(--cc-font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.cc-account-nav-item:hover {
+  background-color: var(--cc-soft-tint);
+  color: var(--cc-terracotta);
+}
+
+.cc-account-nav-item.active {
+  background-color: var(--cc-brown);
+  color: var(--cc-white);
+  font-weight: 600;
+}
+
+.cc-account-nav-item.active:hover {
+  background-color: var(--cc-brown-hover);
+  color: var(--cc-white);
+}
+
+.cc-account-logout-btn {
+  color: var(--cc-error);
+}
+
+.cc-account-logout-btn:hover {
+  background-color: rgba(192, 57, 43, 0.08);
+  color: var(--cc-error);
+}
+
+/* Focus states */
+.cc-account-nav-item:focus-visible,
+.cc-view-details-btn:focus-visible,
+.btn-cc-primary:focus-visible,
+.btn-cc-secondary:focus-visible,
+.cc-modal-close:focus-visible {
+  outline: 2px solid var(--cc-terracotta);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* Right Panel: Order History */
+.cc-orders-heading {
+  font-size: 1.85rem;
+  font-weight: 700;
+}
+
+.cc-orders-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--cc-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background-color: var(--cc-white);
+}
+
+.cc-order-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem 1.25rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--cc-border);
+}
+
+.cc-order-row:last-child {
+  border-bottom: none;
+}
+
+.cc-order-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.85rem;
+  min-width: 0;
+  flex: 1 1 13rem;
+}
+
+.cc-order-id {
+  font-weight: 700;
+  color: var(--cc-brown);
+  font-size: 0.96rem;
+  white-space: nowrap;
+}
+
+.cc-order-dish {
+  color: var(--cc-dark-text);
+  font-weight: 500;
+  font-size: 0.96rem;
+  word-break: break-word;
+}
+
+.cc-order-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem 1rem;
+}
+
+.cc-order-price {
+  font-size: 0.96rem;
+  white-space: nowrap;
+}
+
+/* Status Badges using existing brand colour variables */
+.cc-status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.cc-status-delivered {
+  background-color: rgba(109, 137, 99, 0.16);
+  border: 1px solid var(--cc-sage);
+  color: var(--cc-dark-text);
+}
+
+.cc-status-preparing {
+  background-color: rgba(198, 107, 69, 0.16);
+  border: 1px solid var(--cc-terracotta);
+  color: var(--cc-brown);
+}
+
+.cc-status-cancelled {
+  background-color: rgba(192, 57, 43, 0.1);
+  border: 1px solid var(--cc-error);
+  color: var(--cc-error);
+}
+
+.cc-view-details-btn {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+/* Empty Orders State */
+.cc-orders-empty {
+  border: 1px solid var(--cc-border);
+  border-radius: 0.75rem;
+  background-color: var(--cc-cream);
+}
+
+.cc-orders-empty-title {
+  font-family: var(--cc-font-heading);
+  color: var(--cc-brown);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.cc-orders-empty-text {
+  color: var(--cc-dark-text);
+  font-size: 0.94rem;
+}
+
+/* Order Details Modal */
+.cc-modal-content {
+  background-color: var(--cc-white);
+  border: 1px solid var(--cc-border);
+  border-radius: 0.75rem;
+}
+
+.cc-modal-header,
+.cc-modal-footer {
+  border-color: var(--cc-border);
+}
+
+.cc-modal-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.cc-order-items-table th {
+  color: var(--cc-brown);
+  font-weight: 600;
+  font-size: 0.88rem;
+  border-bottom-color: var(--cc-border);
+}
+
+.cc-order-items-table td {
+  color: var(--cc-dark-text);
+  font-size: 0.92rem;
+  border-bottom-color: var(--cc-border);
+}
+
+.cc-order-totals {
+  border-top: 1px solid var(--cc-border);
+}
+
+.cc-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--cc-dark-text);
+  font-size: 0.94rem;
+  margin-bottom: 0.35rem;
+}
+
+.cc-total-row-final {
+  border-top: 1px solid var(--cc-border);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--cc-brown);
+  margin-bottom: 0;
+}
+
+/* Logged-in Header Account Label (matches css/auth.css) */
+.cc-header-user-name {
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.cc-dropdown-user-label {
+  color: var(--cc-brown);
+  font-size: 0.85rem;
+}
+
+.cc-dropdown-logout {
+  color: var(--cc-error);
+  font-weight: 500;
+}
+
+.cc-dropdown-logout:hover,
+.cc-dropdown-logout:focus {
+  color: var(--cc-error);
+  background-color: rgba(192, 57, 43, 0.08);
+}
+
+/* Mobile Layout Adjustments (<= 575px) */
+@media (max-width: 575.98px) {
+  .cc-order-row {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+
+  .cc-order-main {
+    flex: none;
+  }
+
+  .cc-order-meta {
+    justify-content: space-between;
+  }
+}
