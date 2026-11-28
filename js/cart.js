@@ -168,6 +168,35 @@ function clearStoredPromo() {
   }
 }
 
+// Safely loads the applied promo code from localStorage; returns "" if none
+function loadPromo() {
+  try {
+    var rawPromo = localStorage.getItem(PROMO_STORAGE_KEY);
+    if (!rawPromo) {
+      return "";
+    }
+    var parsedPromo = JSON.parse(rawPromo);
+    if (parsedPromo && typeof parsedPromo.code === "string") {
+      var cleanCode = parsedPromo.code.trim().toUpperCase();
+      if (cleanCode === VALID_PROMO_CODE) {
+        return cleanCode;
+      }
+    }
+    return "";
+  } catch (error) {
+    return "";
+  }
+}
+
+// Safely saves the valid promo code object to localStorage
+function savePromo(code) {
+  try {
+    localStorage.setItem(PROMO_STORAGE_KEY, JSON.stringify({ code: code }));
+  } catch (error) {
+    // Ignore storage errors if browser blocks localStorage
+  }
+}
+
 /* --------------------------------------------------------------------------
    Formatting & Header Badge Helpers
    -------------------------------------------------------------------------- */
@@ -380,6 +409,13 @@ function showCart() {
     cartLayout.classList.add("d-none");
     mobileBar.classList.add("d-none");
     document.body.classList.remove("has-cart-items");
+    clearStoredPromo();
+    var promoInput = document.getElementById("promo-input");
+    if (promoInput) {
+      promoInput.value = "";
+    }
+    showPromoMessage("", true);
+    calculateTotals(cartItems);
     updateCartBadge();
     return;
   }
@@ -394,6 +430,12 @@ function showCart() {
     itemsList.appendChild(itemCard);
   }
 
+  // Keep active promo message visible across page refreshes
+  if (loadPromo() === VALID_PROMO_CODE) {
+    showPromoMessage("Promo code " + VALID_PROMO_CODE + " applied! 10% discount included in total.", true);
+  }
+
+  calculateTotals(cartItems);
   updateCartBadge();
 }
 
@@ -469,6 +511,114 @@ function removeItem(index) {
 }
 
 /* --------------------------------------------------------------------------
+   Promo Code & Price Calculation Functions
+   -------------------------------------------------------------------------- */
+
+// Displays a success (sage green) or error (terracotta) message below the promo input
+function showPromoMessage(message, isSuccess) {
+  var msgEl = document.getElementById("promo-message");
+  if (!msgEl) {
+    return;
+  }
+
+  msgEl.classList.remove("promo-message-success");
+  msgEl.classList.remove("promo-message-error");
+
+  if (!message) {
+    msgEl.textContent = "";
+    return;
+  }
+
+  msgEl.textContent = message;
+  if (isSuccess) {
+    msgEl.classList.add("promo-message-success");
+  } else {
+    msgEl.classList.add("promo-message-error");
+  }
+}
+
+// Calculates subtotal, delivery fee, 5% tax, promo discount, and final total
+function calculateTotals(cartItems) {
+  var subtotal = 0;
+  for (var i = 0; i < cartItems.length; i = i + 1) {
+    subtotal = subtotal + (cartItems[i].unitPrice * cartItems[i].quantity);
+  }
+
+  var deliveryFee = 0;
+  if (cartItems.length > 0) {
+    deliveryFee = DELIVERY_FEE;
+  }
+
+  var taxAmount = Math.round(subtotal * TAX_RATE);
+
+  var discountAmount = 0;
+  if (cartItems.length > 0 && loadPromo() === VALID_PROMO_CODE) {
+    discountAmount = Math.round(subtotal * PROMO_DISCOUNT_RATE);
+  }
+
+  var totalAmount = subtotal + deliveryFee + taxAmount - discountAmount;
+
+  var subtotalEl = document.getElementById("summary-subtotal");
+  var deliveryEl = document.getElementById("summary-delivery");
+  var taxEl = document.getElementById("summary-tax");
+  var totalEl = document.getElementById("summary-total");
+  var mobileTotalEl = document.getElementById("mobile-summary-total");
+
+  if (subtotalEl) {
+    subtotalEl.textContent = formatPrice(subtotal);
+  }
+  if (deliveryEl) {
+    deliveryEl.textContent = formatPrice(deliveryFee);
+  }
+  if (taxEl) {
+    taxEl.textContent = formatPrice(taxAmount);
+  }
+  if (totalEl) {
+    totalEl.textContent = formatPrice(totalAmount);
+  }
+  if (mobileTotalEl) {
+    mobileTotalEl.textContent = formatPrice(totalAmount);
+  }
+}
+
+// Validates and applies the promo code entered by the user
+function applyPromo() {
+  var promoInput = document.getElementById("promo-input");
+  if (!promoInput) {
+    return;
+  }
+
+  var enteredCode = promoInput.value.trim().toUpperCase();
+  if (enteredCode === "") {
+    showPromoMessage("Please enter a promo code.", false);
+    return;
+  }
+
+  if (enteredCode !== VALID_PROMO_CODE) {
+    showPromoMessage("Invalid promo code. Try " + VALID_PROMO_CODE + ".", false);
+    return;
+  }
+
+  if (loadPromo() === VALID_PROMO_CODE) {
+    showPromoMessage("Promo code " + VALID_PROMO_CODE + " is already applied.", false);
+    return;
+  }
+
+  savePromo(VALID_PROMO_CODE);
+  showPromoMessage("Promo code " + VALID_PROMO_CODE + " applied! 10% discount included in total.", true);
+  calculateTotals(loadCart());
+}
+
+// Navigates to checkout.html only when the cart has at least one item
+function goToCheckout() {
+  var cartItems = loadCart();
+  if (cartItems.length === 0) {
+    return;
+  }
+  window.location.href = CHECKOUT_PAGE;
+}
+
+/* --------------------------------------------------------------------------
    Temporary Testing Helper
    -------------------------------------------------------------------------- */
 
@@ -513,6 +663,31 @@ function initCartPage() {
   var sampleBtn = document.getElementById("add-sample-btn");
   if (sampleBtn) {
     sampleBtn.addEventListener("click", addSampleItems);
+  }
+
+  var applyPromoBtn = document.getElementById("apply-promo-btn");
+  if (applyPromoBtn) {
+    applyPromoBtn.addEventListener("click", applyPromo);
+  }
+
+  var promoInput = document.getElementById("promo-input");
+  if (promoInput) {
+    promoInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        applyPromo();
+      }
+    });
+  }
+
+  var checkoutBtn = document.getElementById("checkout-btn");
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", goToCheckout);
+  }
+
+  var mobileCheckoutBtn = document.getElementById("mobile-checkout-btn");
+  if (mobileCheckoutBtn) {
+    mobileCheckoutBtn.addEventListener("click", goToCheckout);
   }
 
   showCart();
