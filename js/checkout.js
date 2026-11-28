@@ -222,6 +222,244 @@ function showTotals(totals) {
 }
 
 /* ================================================================
+   INLINE VALIDATION — helpers and field validators
+   ================================================================ */
+
+// Track whether a field has been touched (blurred) at least once.
+// We only show real-time input errors after the first blur.
+var fieldTouched = {
+    name:    false,
+    email:   false,
+    phone:   false,
+    address: false
+};
+
+// Mark a field as invalid: red border, show the error message, hide the valid tick
+function showError(fieldId, errorId, validId, message) {
+    var field = document.getElementById(fieldId);
+    var errEl = document.getElementById(errorId);
+    var valEl = document.getElementById(validId);
+
+    if (field) {
+        field.classList.add("input-error");
+        field.classList.remove("input-valid");
+    }
+    if (errEl) {
+        errEl.textContent = message;
+        errEl.style.display = "block";
+    }
+    if (valEl) {
+        valEl.style.display = "none";
+    }
+}
+
+// Mark a field as valid: green border, hide the error, show the valid tick
+function clearError(fieldId, errorId, validId) {
+    var field = document.getElementById(fieldId);
+    var errEl = document.getElementById(errorId);
+    var valEl = document.getElementById(validId);
+
+    if (field) {
+        field.classList.remove("input-error");
+        field.classList.add("input-valid");
+    }
+    if (errEl) {
+        errEl.style.display = "none";
+    }
+    if (valEl) {
+        valEl.style.display = "block";
+    }
+}
+
+// Validate the Full Name field (min 3 chars, letters and spaces only)
+function validateName() {
+    var field = document.getElementById("customer-name");
+    if (!field) { return true; }
+    var val = field.value.trim();
+    if (val.length < 3) {
+        showError("customer-name", "name-error", "name-valid",
+                  "Name must be at least 3 characters.");
+        return false;
+    }
+    var namePattern = /^[a-zA-Z\s]+$/;
+    if (!namePattern.test(val)) {
+        showError("customer-name", "name-error", "name-valid",
+                  "Name can only contain letters and spaces.");
+        return false;
+    }
+    clearError("customer-name", "name-error", "name-valid");
+    return true;
+}
+
+// Validate the Email field (simple format check)
+function validateEmail() {
+    var field = document.getElementById("customer-email");
+    if (!field) { return true; }
+    var val = field.value.trim();
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(val)) {
+        showError("customer-email", "email-error", "email-valid",
+                  "Please enter a valid email address.");
+        return false;
+    }
+    clearError("customer-email", "email-error", "email-valid");
+    return true;
+}
+
+// Validate the Phone field (Pakistani format: 03xxxxxxxxx — 11 digits)
+function validatePhone() {
+    var field = document.getElementById("customer-phone");
+    if (!field) { return true; }
+    var raw = field.value.replace(/-/g, "").replace(/\s/g, "");
+    var phonePattern = /^03\d{9}$/;
+    if (!phonePattern.test(raw)) {
+        showError("customer-phone", "phone-error", "phone-valid",
+                  "Enter a valid Pakistani number, e.g. 03001234567.");
+        return false;
+    }
+    clearError("customer-phone", "phone-error", "phone-valid");
+    return true;
+}
+
+// Validate the Delivery Address field.
+// Only required when Delivery (not Pickup) is selected.
+function validateAddress() {
+    var deliveryRadio = document.querySelector('[name="deliveryType"][value="delivery"]');
+    var isDelivery    = deliveryRadio && deliveryRadio.checked;
+
+    if (!isDelivery) {
+        // Pickup — address is not needed; clear any existing error state
+        var field = document.getElementById("customer-address");
+        if (field) {
+            field.classList.remove("input-error");
+            field.classList.remove("input-valid");
+        }
+        var errEl = document.getElementById("address-error");
+        if (errEl) { errEl.style.display = "none"; }
+        return true;
+    }
+
+    var addrField = document.getElementById("customer-address");
+    if (!addrField) { return true; }
+    var val = addrField.value.trim();
+    if (val.length < 10) {
+        showError("customer-address", "address-error", "address-valid",
+                  "Please enter your full delivery address (at least 10 characters).");
+        return false;
+    }
+    clearError("customer-address", "address-error", "address-valid");
+    return true;
+}
+
+// Validate that at least one Payment Method radio button is checked
+function validatePayment() {
+    var radios  = document.querySelectorAll('[name="paymentMethod"]');
+    var checked = false;
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            checked = true;
+            break;
+        }
+    }
+    var errEl = document.getElementById("payment-error");
+    if (!checked) {
+        if (errEl) {
+            errEl.textContent = "Please select a payment method.";
+            errEl.style.display = "block";
+        }
+        return false;
+    }
+    if (errEl) { errEl.style.display = "none"; }
+    return true;
+}
+
+// Run all validators in order. Focus the first invalid field. Return true if all pass.
+function validateAll() {
+    var nameOk    = validateName();
+    var emailOk   = validateEmail();
+    var phoneOk   = validatePhone();
+    var addressOk = validateAddress();
+    var paymentOk = validatePayment();
+
+    if (!nameOk) {
+        var n = document.getElementById("customer-name");
+        if (n) { n.focus(); }
+        return false;
+    }
+    if (!emailOk) {
+        var e = document.getElementById("customer-email");
+        if (e) { e.focus(); }
+        return false;
+    }
+    if (!phoneOk) {
+        var p = document.getElementById("customer-phone");
+        if (p) { p.focus(); }
+        return false;
+    }
+    if (!addressOk) {
+        var a = document.getElementById("customer-address");
+        if (a) { a.focus(); }
+        return false;
+    }
+    return paymentOk;
+}
+
+// Attach blur + input listeners so errors appear on first blur then update live
+function attachFieldListeners() {
+    // ---- Full Name ----
+    var nameField = document.getElementById("customer-name");
+    if (nameField) {
+        nameField.addEventListener("blur", function () {
+            fieldTouched.name = true;
+            validateName();
+        });
+        nameField.addEventListener("input", function () {
+            saveFormValues();
+            if (fieldTouched.name) { validateName(); }
+        });
+    }
+
+    // ---- Email ----
+    var emailField = document.getElementById("customer-email");
+    if (emailField) {
+        emailField.addEventListener("blur", function () {
+            fieldTouched.email = true;
+            validateEmail();
+        });
+        emailField.addEventListener("input", function () {
+            saveFormValues();
+            if (fieldTouched.email) { validateEmail(); }
+        });
+    }
+
+    // ---- Phone ----
+    var phoneField = document.getElementById("customer-phone");
+    if (phoneField) {
+        phoneField.addEventListener("blur", function () {
+            fieldTouched.phone = true;
+            validatePhone();
+        });
+        phoneField.addEventListener("input", function () {
+            saveFormValues();
+            if (fieldTouched.phone) { validatePhone(); }
+        });
+    }
+
+    // ---- Delivery Address ----
+    var addrField = document.getElementById("customer-address");
+    if (addrField) {
+        addrField.addEventListener("blur", function () {
+            fieldTouched.address = true;
+            validateAddress();
+        });
+        addrField.addEventListener("input", function () {
+            saveFormValues();
+            if (fieldTouched.address) { validateAddress(); }
+        });
+    }
+}
+
+/* ================================================================
    DELIVERY TYPE TOGGLE
    ================================================================ */
 
@@ -376,13 +614,17 @@ function initCheckoutPage() {
         });
     }
 
-    // Wire up payment radios to save form values
+    // Wire up payment radios to validate and save form values
     var payRadios = document.querySelectorAll('[name="paymentMethod"]');
     for (var k = 0; k < payRadios.length; k++) {
         payRadios[k].addEventListener("change", function () {
+            validatePayment();
             saveFormValues();
         });
     }
+
+    // Attach field-level live validation listeners
+    attachFieldListeners();
 }
 
 /* ================================================================
