@@ -15,6 +15,14 @@
   var MIN_PASSWORD_LENGTH = 8;
   var EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+  // ---- Pre-seeded demo account ----
+  // This simulated account exists so the order-details feature can be shown
+  // in any browser without requiring the visitor to sign up first.
+  // It is added to cc_users once on page load if it does not already exist.
+  var DEMO_EMAIL    = "demo@cravecorner.com";
+  var DEMO_NAME     = "Demo User";
+  var DEMO_PASSWORD = "Demo1234";
+
   // Track which sign-up fields the user has interacted with for live validation
   var signupTouched = {
     name: false,
@@ -646,6 +654,31 @@
      ------------------------------------------------------------------------ */
 
   /**
+   * Seeds the demo account into cc_users when no user with DEMO_EMAIL exists.
+   * Uses the EXACT same object shape as handleSignupSubmit so login works
+   * the same way for the demo account as for any real registered user.
+   * Never overwrites or duplicates an existing demo user entry.
+   */
+  function seedDemoAccount() {
+    if (findUserByEmail(DEMO_EMAIL)) {
+      return; // already registered — nothing to do
+    }
+
+    var demoUser = {
+      id:        "usr_demo_cravecorner",
+      fullName:  DEMO_NAME,
+      firstName: "Demo",
+      email:     DEMO_EMAIL,
+      password:  DEMO_PASSWORD,
+      createdAt: "2026-01-01T00:00:00.000Z"
+    };
+
+    var users = loadUsers();
+    users.push(demoUser);
+    saveUsers(users);
+  }
+
+  /**
    * Attaches live validation listeners to all four Sign Up inputs.
    */
   function bindLiveSignupValidation() {
@@ -760,9 +793,11 @@
   }
 
   /**
-   * Initializes page state on load: restores existing session if present.
+   * Initializes page state on load: seeds the demo account if needed,
+   * then restores existing session if present.
    */
   function initAuthPage() {
+    seedDemoAccount();
     bindEvents();
 
     var activeSession = getCurrentSession();
